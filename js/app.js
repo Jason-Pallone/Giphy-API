@@ -1,8 +1,7 @@
-const gifList = document.querySelector('#gif-container');
 const btn = document.querySelector('button');
-const gifSearchInput = document.querySelector('input');
-
-
+const gifContainer = document.querySelector('#gif-container');
+const errorDiv = document.querySelector('#error-div')
+const searchInput = document.querySelector('input');
 
 
 async function getJSON(url){
@@ -15,23 +14,31 @@ async function getJSON(url){
 }
 
 function generateHTML(json){
-    json.data.map((gif) =>{
-      const section = document.createElement('section')
-      gifList.appendChild(section)
-      section.innerHTML =
-        `<iframe src="${gif.embed_url}">`;
+  json.data.map((gif) =>{
+    const section = document.createElement('section')
+    gifContainer.appendChild(section)
+    section.innerHTML =
+      `<iframe src="${gif.embed_url}">`;
   })
 }
 
+function clearContainer(){
+  if(gifContainer != null){
+    gifContainer.innerHTML= ''
+  };
+}
 
 btn.addEventListener('click', (event) => {
-    event.target.textContent = 'Loading...'
+  event.target.textContent = 'Loading...';
+  clearContainer();
 
-    if(gifList != null){
-        gifList.innerHTML= ''
-    }
-  
-    getJSON(`https://api.giphy.com/v1/gifs/search?q=${gifSearchInput.value}&api_key=4tpMFSuczoVjHX6HhhJlcrqILj2uAVGY&limit=5`)
-      .then(generateHTML)
-      .finally(() => event.target.textContent='Get Gifs!')
+  getJSON(`https://api.giphy.com/v1/gifs/search?q=${searchInput.value}&api_key=4tpMFSuczoVjHX6HhhJlcrqILj2uAVGY&limit=24&rating=pg-13`)
+    .then(generateHTML)
+    .catch( err => {
+      errorDiv.innerHTML = "<h3>Something went wrong!</h3>"
+      console.error(err);
+    })
+    .finally(() => event.target.textContent='Get Gifs!');
+
+  searchInput.value = '';
 })
