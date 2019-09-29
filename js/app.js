@@ -35,7 +35,7 @@ btn.addEventListener('click', (event) => {
   getJSON(`https://api.giphy.com/v1/gifs/search?q=${searchInput.value}&api_key=4tpMFSuczoVjHX6HhhJlcrqILj2uAVGY&limit=24&rating=pg-13`)
     .then(generateHTML)
     .catch( err => {
-      errorDiv.innerHTML = "<h3>Something went wrong!</h3>"
+      errorDiv.innerHTML = "<h3>Something went wrong.</h3>"
       console.error(err);
     })
     .finally(() => event.target.textContent='Get Gifs!');
